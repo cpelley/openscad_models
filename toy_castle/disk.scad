@@ -5,23 +5,31 @@ module castle_disk(thickness=3.73, diameter=35.6){
     }
 
 
+    module lightning_bolt(){
+        rotate([0, 0, 45]) polygon([[19,17],[-3,5],[6,5],[-15,-7],[-5,-7],[-20,-20],[7,-6],[-2,-6],[17,8],[9,8]]);
+    }
+
+
     module disk() {
         difference(){
             circle(d=diameter-thickness, $fn=50);
             // Six sided via fn
             circle(d=(diameter/5.4), $fn=6);
             
-            // Knives
+            // Knives and lightning_bolt
             num_knives = 6;
             knive_angle = 360/num_knives;
             for (i = [1:num_knives]) {
+                // Knife
                 rotate([0, 0, knive_angle*i]) translate([8, 0, 0]) scale([.35, .35, 1]) knife();
+                // lightning sbolt
+                rotate([0, 0, knive_angle*i]) translate([-1, 10, 10]) scale([.35, .22, .25]) lightning_bolt();
             }
         }
     }
 
 
-    module rounded(){
+    module rounded_edge(){
         translate([0,0,0]){
             rotate_extrude(convexity = 10, $fn = 100)
             translate([(diameter/2) - (thickness/2), thickness/2, 0])
@@ -30,10 +38,14 @@ module castle_disk(thickness=3.73, diameter=35.6){
     }
 
 
+    color("Grey") 
     linear_extrude(thickness){
         disk();
     }
-    rounded();
+    
+    color("DarkGrey")
+    rounded_edge();
 }
 
-castle_disk();
+// We scale to make slightly smaller (for some reason it's coming out too big).
+scale([.98, .98, .98]) castle_disk();
