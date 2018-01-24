@@ -33,7 +33,11 @@ module castle_disk(thickness=3.73, diameter=35.6){
         translate([0,0,0]){
             rotate_extrude(convexity = 10, $fn = 100)
             translate([(diameter/2) - (thickness/2), thickness/2, 0])
-            circle(d=thickness, $fn=50);
+            // Extrude a half circule rather than a full one to minimise plastic usage.
+            difference(){
+                circle(d=thickness, $fn=50);
+                translate([-thickness/2, -thickness/2, 0]) square([thickness/2, thickness*2]);
+            }
         }
     }
 
