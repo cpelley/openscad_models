@@ -9,6 +9,15 @@ module castle_disk(thickness=3.73, diameter=35.6){
         rotate([0, 0, 45]) polygon([[19,17],[-3,5],[6,5],[-15,-7],[-5,-7],[-20,-20],[7,-6],[-2,-6],[17,8],[9,8]]);
     }
 
+    module ring_cut(x_translate, y_translate){
+        module single_ring(x_translate, y_translate){
+            rotate_extrude(convexity = 10, $fn = 20)
+            translate([x_translate, (thickness/2)+y_translate, 0])
+            circle(d=thickness/1.5, $fn=50);
+        }
+        single_ring(x_translate, y_translate/2);
+        single_ring(x_translate, -y_translate/2);
+    }
 
     module disk() {
         difference(){
@@ -41,11 +50,9 @@ module castle_disk(thickness=3.73, diameter=35.6){
         }
     }
 
-
-    color("Grey") 
-    linear_extrude(thickness){
-        disk();
-    }
+    color("Grey")
+    linear_extrude(thickness)
+    disk();
     
     color("DarkGrey")
     rounded_edge();
